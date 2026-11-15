@@ -18,5 +18,5 @@ setup(
     entry_points={
         'console_scripts': ['my-command=exampleproject.example:main']
     },
-    package_data={'kalchas': ['data/schema.json']}
+    package_data={'kalchas': ['data/schema.json', 'checkpoints/*/*.pt']}
 )

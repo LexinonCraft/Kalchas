@@ -1,3 +1,4 @@
+from pathlib import Path
 import torch
 from .dataset import ImageDataset
 from torch.utils.data import DataLoader
@@ -12,11 +13,11 @@ from PIL import Image
 
 _models = {
     "Kalchas": {
-        "url": "kalchas/checkpoints/Kalchas/model9_best_loss_1.35",
+        "checkpoint": "Kalchas/model9_best_loss_1.35",
         "name": "Kalchas-loss_1.35",
     },
     "Polyton-DB": {
-        "url": "kalchas/checkpoints/Polyton-DB/99_model_best_loss_1.184",
+        "checkpoint": "Polyton-DB/99_model_best_loss_1.184",
         "name": "Polyton-DB_loss_1.184",
     },
 }
@@ -173,8 +174,13 @@ def load_ocr_model(model_name: str, device: Optional[str] = "cpu") -> TextRecogn
             f"Model {model_name} not found. Available models: {list_available_models()}"
         )
 
-    MODEL_PATH = _models[model_name]["url"] + ".pt"
-    ARTIFACT_PATH = _models[model_name]["url"] + "_artifacts.pt"
+    checkpoint_path = (
+        Path(__file__).resolve().parent
+        / "checkpoints"
+        / _models[model_name]["checkpoint"]
+    )
+    MODEL_PATH = checkpoint_path.with_name(checkpoint_path.name + ".pt")
+    ARTIFACT_PATH = checkpoint_path.with_name(checkpoint_path.name + "_artifacts.pt")
 
     char2idx, idx2char, width, height, MAX_TEXT_LENGTH = torch.load(ARTIFACT_PATH)
     model = TextRecognizer(
@@ -182,7 +188,7 @@ def load_ocr_model(model_name: str, device: Optional[str] = "cpu") -> TextRecogn
         width=width,
         height=height,
         num_class=len(idx2char),
-        model_path=MODEL_PATH,
+        model_path=str(MODEL_PATH),
         idx2char=idx2char,
         char2idx=char2idx,
     )
