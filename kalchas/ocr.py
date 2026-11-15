@@ -89,7 +89,7 @@ class TextRecognizer:
         self.model = CRNN(
             1, img_height=height, img_width=width, num_class=num_class, leaky_relu=True
         ).to(device)
-        self.model.load_state_dict(torch.load(model_path))
+        self.model.load_state_dict(torch.load(model_path, map_location=torch.device("cpu")))
         self.model.eval()
         self.device = device
         self.idx2char = idx2char
@@ -182,7 +182,7 @@ def load_ocr_model(model_name: str, device: Optional[str] = "cpu") -> TextRecogn
     MODEL_PATH = checkpoint_path.with_name(checkpoint_path.name + ".pt")
     ARTIFACT_PATH = checkpoint_path.with_name(checkpoint_path.name + "_artifacts.pt")
 
-    char2idx, idx2char, width, height, MAX_TEXT_LENGTH = torch.load(ARTIFACT_PATH)
+    char2idx, idx2char, width, height, MAX_TEXT_LENGTH = torch.load(ARTIFACT_PATH, map_location=torch.device("cpu"))
     model = TextRecognizer(
         device=device,
         width=width,
