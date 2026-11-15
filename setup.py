@@ -1,13 +1,13 @@
 from setuptools import setup, find_packages
 
 setup(
-    name='Kachas',
+    name='kalchas',
     version='0.1.0',
     description='A simple OCR library for Greek Polytonic texts',
     author='Konstantinos Perifanos',
     author_email='kostas.perifanos@gmail.com',
     url='https://www.github.com/kperi/kalchas',
-    packages=find_packages(include=['Kalchas', 'Kalchas.*']),
+    packages=find_packages(include=['kalchas', 'kalchas.*']),
     install_requires=[
         'numpy>=1.14.5',
         'torch>=2.2.0',
@@ -18,5 +18,5 @@ setup(
     entry_points={
         'console_scripts': ['my-command=exampleproject.example:main']
     },
-    package_data={'Kalchas': ['data/schema.json']}
+    package_data={'kalchas': ['data/schema.json']}
 )
